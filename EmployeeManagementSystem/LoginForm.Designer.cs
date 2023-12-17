@@ -40,6 +40,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.signupButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.closeLabel = new System.Windows.Forms.Label();
             this.leftPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +61,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panel1.Controls.Add(this.closeLabel);
             this.panel1.Controls.Add(this.loginButton);
             this.panel1.Controls.Add(this.showpassCheckbox);
             this.panel1.Controls.Add(this.passwordTxtbox);
@@ -202,6 +204,18 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Register account";
             // 
+            // closeLabel
+            // 
+            this.closeLabel.AutoSize = true;
+            this.closeLabel.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.closeLabel.Location = new System.Drawing.Point(250, 9);
+            this.closeLabel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 24);
+            this.closeLabel.Name = "closeLabel";
+            this.closeLabel.Size = new System.Drawing.Size(21, 22);
+            this.closeLabel.TabIndex = 7;
+            this.closeLabel.Text = "X";
+            this.closeLabel.Click += new System.EventHandler(this.closeLabel_Click);
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -238,5 +252,6 @@
         private System.Windows.Forms.CheckBox showpassCheckbox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button signupButton;
+        private System.Windows.Forms.Label closeLabel;
     }
 }
