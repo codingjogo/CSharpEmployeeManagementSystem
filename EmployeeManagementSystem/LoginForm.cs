@@ -36,5 +36,10 @@ namespace EmployeeManagementSystem
         {
 
         }
+
+        private void closeLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
