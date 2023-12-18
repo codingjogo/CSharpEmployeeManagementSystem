@@ -19,7 +19,9 @@ namespace EmployeeManagementSystem
 
         private void signupButton_Click(object sender, EventArgs e)
         {
-
+            SignupForm signupForm = new SignupForm();
+            signupForm.Show();
+            this.Hide();
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -34,12 +36,12 @@ namespace EmployeeManagementSystem
 
         private void showpassCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-
+            passwordTxtbox.PasswordChar = showpassCheckbox.Checked ? '\0' : '*';
         }
 
         private void closeLabel_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
     }
 }
