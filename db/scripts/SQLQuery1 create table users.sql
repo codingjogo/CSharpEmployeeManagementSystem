@@ -1,0 +1,9 @@
+﻿CREATE TABLE Users
+(
+	ID INT PRIMARY KEY IDENTITY(1,1),
+	username VARCHAR(MAX) NULL,
+	password VARCHAR(MAX) NULL,
+	date_register DATE NULL,
+)
+
+select * from users;
