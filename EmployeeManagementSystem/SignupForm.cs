@@ -44,28 +44,29 @@ namespace EmployeeManagementSystem
             {
                 try
                 {
-                        connection.Open();
+                    connection.Open();
 
-                        if (IsUsernameTaken(connection, newUsernameTxtbox.Text.Trim()))
-                        {
-                            MessageBox.Show($"{newUsernameTxtbox.Text.Trim()} is already taken", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        else
-                        {
-                            RegisterUser(connection, newUsernameTxtbox.Text.Trim(), newPasswordTxtbox.Text.Trim());
-                            MessageBox.Show("Registered Successfully", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (IsUsernameTaken(connection, newUsernameTxtbox.Text.Trim()))
+                    {
+                        MessageBox.Show($"{newUsernameTxtbox.Text.Trim()} is already taken", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        RegisterUser(connection, newUsernameTxtbox.Text.Trim(), newPasswordTxtbox.Text.Trim());
+                        MessageBox.Show("Registered Successfully", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            LoginForm loginForm = new LoginForm();
-                            loginForm.Show();
-                            this.Hide();
-                        }
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.Show();
+                        this.Hide();
+                    }
                 }
                 catch (Exception ex)
                 {
                     // Log the exception for debugging purposes
                     Console.WriteLine("Error: " + ex);
                     MessageBox.Show("An error occurred while processing your request", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } finally
+                }
+                finally
                 {
                     connection.Close();
                 }
