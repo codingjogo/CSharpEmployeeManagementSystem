@@ -29,7 +29,7 @@ namespace EmployeeManagementSystem
                 MessageBox.Show("Please fill blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             } else
             {
-                if (connection.State != ConnectionState.Closed)
+                if (connection.State != ConnectionState.Open)
                 {
                     try
                     {
@@ -42,7 +42,18 @@ namespace EmployeeManagementSystem
                         {
                             command.Parameters.AddWithValue("@user", usernameTxtbox.Text.Trim());
                             command.Parameters.AddWithValue("@pass", passwordTxtbox.Text.Trim());
-                            command.ExecuteNonQuery();
+                           
+                            SqlDataAdapter adapter = new SqlDataAdapter(command);
+                            DataTable dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+
+                            if (dataTable.Rows.Count >= 1)
+                            {
+                                MessageBox.Show("Login successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            } else
+                            {
+                                MessageBox.Show("Incorrect Username/Password", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                     catch (Exception ex)
