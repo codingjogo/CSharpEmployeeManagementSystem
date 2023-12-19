@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace EmployeeManagementSystem
 {
     public partial class LoginForm : Form
     {
+        SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\jogod\source\repos\EmployeeManagementSystem\EmployeeManagementSystem\employee.mdf;Integrated Security=True;Connect Timeout=30");
         public LoginForm()
         {
             InitializeComponent();
@@ -26,7 +24,40 @@ namespace EmployeeManagementSystem
 
         private void loginButton_Click(object sender, EventArgs e)
         {
+            if (usernameTxtbox.Text == "" || passwordTxtbox.Text == "")
+            {
+                MessageBox.Show("Please fill blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } else
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    try
+                    {
+                        connection.Open();
 
+                        // select user from database base on user input
+                        string selectUserQuery = "SELECT * FROM Users WHERE username = @user AND password = @pass";
+
+                        using (SqlCommand command = new SqlCommand(selectUserQuery, connection)) 
+                        {
+                            command.Parameters.AddWithValue("@user", usernameTxtbox.Text.Trim());
+                            command.Parameters.AddWithValue("@pass", passwordTxtbox.Text.Trim());
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex, "Error mesage", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                } else
+                {
+
+                }
+            }
         }
 
         private void LoginForm_Load(object sender, EventArgs e)

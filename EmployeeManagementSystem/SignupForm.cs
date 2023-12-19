@@ -36,66 +36,69 @@ namespace EmployeeManagementSystem
         private void registerButton_Click(object sender, EventArgs e)
         {
             // Step 2 - setting up a connection
-            if (newUsernameTxtbox.Text == "" || newPasswordTxtbox.Text == "")
+            if (string.IsNullOrEmpty(newUsernameTxtbox.Text) || string.IsNullOrEmpty(newPasswordTxtbox.Text))
             {
-                MessageBox.Show("Please fill blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please fill in blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                // ckeck state
-                if (connection.State != ConnectionState.Open)
+                try
                 {
-                    try
+                    connection.Open();
+
+                    if (IsUsernameTaken(connection, newUsernameTxtbox.Text.Trim()))
                     {
-                        // open connection state
-                        connection.Open();
-
-                        // checks if the id of user is already exist
-                        string selectUsernameQuery = "SELECT COUNT(ID) FROM Users WHERE username = @user";
-
-                        using (SqlCommand checkUserCmd = new SqlCommand(selectUsernameQuery, connection))
-                        {
-                            checkUserCmd.Parameters.AddWithValue("@user", newUsernameTxtbox.Text.Trim());
-
-                            int count = (int) checkUserCmd.ExecuteScalar();
-                            if (count >= 1)
-                            {
-                                MessageBox.Show(newUsernameTxtbox.Text.Trim() + "is already taken", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            } else
-                            {
-                                DateTime today = DateTime.Now;
-
-                                // query to add new row (data) in Users (table)
-                                string newUserDataQuery = $"INSERT INTO Users" +
-                                    $"(username, password, date_register)" +
-                                    $"VALUES (@username, @password, @date_register)"; // is == sqlCommand.Parameters.AddWithValue("@username", newUsernameTxtbox.Text.Trim());
-
-                                using (SqlCommand sqlCommand = new SqlCommand(newUserDataQuery, connection))
-                                {
-                                    sqlCommand.Parameters.AddWithValue("@username", newUsernameTxtbox.Text.Trim());
-                                    sqlCommand.Parameters.AddWithValue("@password", newPasswordTxtbox.Text.Trim());
-                                    sqlCommand.Parameters.AddWithValue("@date_register", today);
-
-                                    sqlCommand.ExecuteNonQuery();
-
-                                    MessageBox.Show("Registered Successfully", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                }
-
-                                LoginForm loginForm = new LoginForm();
-                                loginForm.Show();
-                                this.Hide();
-                            }
-                        }
+                        MessageBox.Show($"{newUsernameTxtbox.Text.Trim()} is already taken", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MessageBox.Show("Error: " + ex, "Error mesage", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        connection.Close();
+                        RegisterUser(connection, newUsernameTxtbox.Text.Trim(), newPasswordTxtbox.Text.Trim());
+                        MessageBox.Show("Registered Successfully", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.Show();
+                        this.Hide();
                     }
                 }
+                catch (Exception ex)
+                {
+                    // Log the exception for debugging purposes
+                    Console.WriteLine("Error: " + ex);
+                    MessageBox.Show("An error occurred while processing your request", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        // Function to check if the username is already taken
+        private bool IsUsernameTaken(SqlConnection connection, string username)
+        {
+            string selectUsernameQuery = "SELECT COUNT(ID) FROM Users WHERE username = @user";
+
+            using (SqlCommand checkUserCmd = new SqlCommand(selectUsernameQuery, connection))
+            {
+                checkUserCmd.Parameters.AddWithValue("@user", username);
+
+                int count = (int)checkUserCmd.ExecuteScalar();
+                return count >= 1;
+            }
+        }
+
+        // Function to register a new user
+        private void RegisterUser(SqlConnection connection, string username, string password)
+        {
+            string newUserDataQuery = "INSERT INTO Users (username, password, date_register) VALUES (@username, @password, @date_register)";
+
+            using (SqlCommand sqlCommand = new SqlCommand(newUserDataQuery, connection))
+            {
+                sqlCommand.Parameters.AddWithValue("@username", username);
+                sqlCommand.Parameters.AddWithValue("@password", password);
+                sqlCommand.Parameters.AddWithValue("@date_register", DateTime.Now);
+
+                sqlCommand.ExecuteNonQuery();
             }
         }
     }
