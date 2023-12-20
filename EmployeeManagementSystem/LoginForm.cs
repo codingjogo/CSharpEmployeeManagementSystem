@@ -50,6 +50,10 @@ namespace EmployeeManagementSystem
                             if (dataTable.Rows.Count >= 1)
                             {
                                 MessageBox.Show("Login successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                MainForm mainForm = new MainForm();
+                                mainForm.Show();
+                                this.Hide();
                             } else
                             {
                                 MessageBox.Show("Incorrect Username/Password", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
