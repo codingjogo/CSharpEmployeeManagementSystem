@@ -73,6 +73,7 @@
     <Compile Include="DashboardUserControl.Designer.cs">
       <DependentUpon>DashboardUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeData.cs" />
     <Compile Include="employeeDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,6 +185,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Directory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
